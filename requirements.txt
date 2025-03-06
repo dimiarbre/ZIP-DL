@@ -1,0 +1,5 @@
+requests
+POT
+SciencePlots
+tqdm
+seaborn

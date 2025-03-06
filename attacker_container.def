@@ -1,0 +1,34 @@
+Bootstrap: docker
+From: ubuntu:22.04
+# From: tensorflow/tensorflow:2.10.1-gpu
+
+%files
+    decentralizepy
+
+%post
+    mkdir /logs
+    mkdir /datasets
+    mkdir /experiments_to_attack
+    mkdir /decentralizepy_grid5000
+    apt-get -y update
+    apt-get -y install --no-install-recommends pip dvipng texlive-latex-extra texlive-fonts-recommended cm-super
+    pip3 install --upgrade pip tqdm requests SciencePlots
+
+    cd decentralizepy
+    # pip3 install -r requirements_privacy.txt
+    pip3 install --editable .
+
+
+%environment
+    export LC_ALL=C
+    export MPLCONFIGDIR=/tmp/matplotlib
+    export DEBIAN_FRONTEND=noninteractive
+
+
+%runscript
+    # Usage : compute_container.sif graph_file nb_machine nb_proc_per_machine nb_iteration eval_file test_after log_level
+    echo "Running contained script"
+    echo "Arguments received: $*"
+    set -x
+
+    python3 /decentralizepy_grid5000/attacks/perform_attacks.py $@ /experiments_to_attack

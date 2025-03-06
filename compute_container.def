@@ -1,0 +1,71 @@
+Bootstrap: docker
+From: ubuntu:22.04
+# From: tensorflow/tensorflow:2.10.1-gpu
+
+%files
+    decentralizepy
+
+%post
+    mkdir /logs
+    touch /ip.json
+    mkdir /datasets
+    mkdir /privacy_datasets
+    apt-get -y update
+    apt-get -y install pip
+    pip3 install --upgrade pip
+
+    cd decentralizepy
+    # pip3 install -r requirements_privacy.txt
+    pip3 install --editable .
+
+
+%environment
+    export LC_ALL=C
+    export MPLCONFIGDIR=/tmp/matplotlib
+
+
+%runscript
+    # Usage : compute_container.sif graph_file nb_machine nb_proc_per_machine nb_iteration eval_file test_after log_level
+    echo "Running contained script"
+    echo "Arguments received: $*"
+    set -x
+
+
+    env_python=python3
+
+    original_config=/logs/config.ini
+    decpy_path=/decentralizepy/eval
+
+    cd $decpy_path
+
+
+    #Outside the docker environment, copy the config on the folder mounted on /logs
+
+    graph=$1
+    machines=$2
+    procs_per_machine=$3
+
+    # Number of exchange, be careful not to confuse with rounds?
+    iterations=$4
+    eval_file=$5
+
+    # Every test_after iteration, the entire train loss is logged 
+    test_after=$6
+    log_level=$7
+
+    averaging_rounds=$8
+
+    # Obtain the IP address
+    m=`cat $(grep addresses_filepath $original_config | awk '{print $3}') | grep \"$(hostname -I| awk '{print $1;}')\" | cut -d'"' -f2`
+
+    echo M is "$m"
+
+
+    log_dir=/logs/machine$m
+    echo "Running mkdir -p $log_dir at $(pwd)"
+    mkdir -p $log_dir
+
+    # TODO : remove this copy, as the g5k script already puts the config file to the temp directory? 
+    config_file=/tmp/config.ini
+    cp $original_config $config_file
+    $env_python $eval_file -ro 0 -tea $test_after -ld $log_dir -mid $m -ps $procs_per_machine -ms $machines -is $iterations -gf $graph -ta $test_after -cf $config_file -ll $log_level -wsd $log_dir --averaging_rounds $averaging_rounds
