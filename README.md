@@ -99,17 +99,22 @@ The structure of `attacks/` is the following:
 
 Paper title: **Low-Cost Privacy-Preserving Decentralized Learning**
 
-Artifacts HotCRP Id: **#Enter your HotCRP Id here** (not your paper Id, but the artifacts id)
+Artifacts HotCRP Id: **9** (not your paper Id, but the artifacts id)
 
 Requested Badge: **Available**
 
 ## Description
-A short description of your artifact and how it links to your paper.
+This artifact contains the code for simulations of the paper **Low-Cost Privacy-Preserving Decentralized Learning**. In particular, it contains the necessary code to:
+* Run simulations corresponding to our algorithm
+* Perform the attacks we use in our paper.
+* Gather and aggregate the results to generate the data used in our paper.
+
+Some chosen important code fragments for the paper are:
+* Implementation of [algorithm 1](https://github.com/dimiarbre/decentralizepy/blob/main/src/decentralizepy/sharing/ZeroSumSharing.py#L16)
+* 
 
 ### Security/Privacy Issues and Ethical Concerns (All badges)
-If your artifact holds any risk to the security or privacy of the reviewer's machine, specify them here, e.g., if your artifact requires a specific security mechanism, like the firewall, ASLR, or another thing, to be disabled for its execution.
-Also, emphasize if your artifact contains malware samples, or something similar, to be analyzed.
-In addition, you should highlight any ethical concerns regarding your artifacts here.
+This artifact does not hold any security or privacy risk. We use public datasets, and perform privacy attacks on models generated within our experiments.
 
 
 ## Environment 
@@ -117,8 +122,6 @@ In the following, describe how to access our artifact and all related and necess
 Afterward, describe how to set up everything and how to verify that everything is set up correctly.
 
 ### Accessibility (All badges)
-Describe how to access your artifact via persistent sources.
-Valid hosting options are institutional and third-party digital repositories.
-Do not use personal web pages.
-For repositories that evolve over time (e.g., Git Repositories ), specify a specific commit-id or tag to be evaluated.
-In case your repository changes during the evaluation to address the reviewer's feedback, please provide an updated link (or commit-id / tag) in a comment.
+This artifact itself contains most of the source code, limited to what was used in the paper. As described above in this README, the full source code can nevertheless be found [at this link](https://gitlab.inria.fr/dilereve/decentralizepy_grid5000/-/tree/Popets_revision?ref_type=tags). However, this repository aims to be self-sufficient in terms of source code, with the only code missing being the experiment configuration generation and deployment scripts.
+
+For the detailed organization of this repository, we refer to the above sections that describes the aim of each folder or code fragment.
