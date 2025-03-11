@@ -110,8 +110,9 @@ This artifact contains the code for simulations of the paper **Low-Cost Privacy-
 * Gather and aggregate the results to generate the data used in our paper.
 
 Some chosen important code fragments for the paper are:
-* Implementation of [algorithm 1](https://github.com/dimiarbre/decentralizepy/blob/main/src/decentralizepy/sharing/ZeroSumSharing.py#L16)
-* 
+* Implementation of [algorithm 1](https://github.com/dimiarbre/decentralizepy/blob/082f945/src/decentralizepy/sharing/ZeroSumSharing.py#L16)
+* Implementation of the [classifier attack](https://github.com/dimiarbre/ZIP-DL/blob/main/attacks/classifier_attacker.py#L583)
+* Implementation of the [Loss attack](https://github.com/dimiarbre/ZIP-DL/blob/main/attacks/threshold_attacker.py#L44)
 
 ### Security/Privacy Issues and Ethical Concerns (All badges)
 This artifact does not hold any security or privacy risk. We use public datasets, and perform privacy attacks on models generated within our experiments.
