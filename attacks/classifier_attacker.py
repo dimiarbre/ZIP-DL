@@ -697,7 +697,6 @@ def classifier_attack(
             attacker_distribution is not None
         ), "None attacker distribution when there are local attack considerations"
         # Filter testset to only contain labels of the classes in the train dataset
-        # TODO: This is not the correct dataset! This should be the attacker's dataset instead!!!
         if debug:
             # TODO:this is a bit of a weird typing. Change this to be int? But for movieLens, they are floats...
             classes_distribution_trainset_current_agent: dict[float, int] = {}
