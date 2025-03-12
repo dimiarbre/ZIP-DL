@@ -103,6 +103,7 @@ Key code fragments include:
 * Implementation of [Algorithm 1](https://github.com/dimiarbre/decentralizepy/blob/082f945/src/decentralizepy/sharing/ZeroSumSharing.py#L16).
 * Implementation of the [classifier attack](https://github.com/dimiarbre/ZIP-DL/blob/main/attacks/classifier_attacker.py#L583).
 * Implementation of the [Loss attack](https://github.com/dimiarbre/ZIP-DL/blob/main/attacks/threshold_attacker.py#L44).
+* Current version of our paper: [`paper57-2025-3-source.pdf`](paper57-2025-3-source.pdf)
 
 ### Security/Privacy Issues and Ethical Concerns (All badges)
 This artifact does not pose any security or privacy risks. We use public datasets and conduct privacy attacks on models generated within our experiments.
