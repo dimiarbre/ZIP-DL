@@ -1,69 +1,58 @@
 # ZIP-DL
 
-This repository contains the code for the paper "Low-Cost Privacy-Aware Decentralized learning", available here: https://arxiv.org/abs/2403.11795
+This repository contains the code for the paper "Low-Cost Privacy-Aware Decentralized Learning," available here: https://arxiv.org/abs/2403.11795.
 
-Some code fragments were ommitted as they are too dependent of our original computing grid, and use [enoslib](https://discovery.gitlabpages.inria.fr/enoslib/) scripts. They are all related to deploying and then saving simulations results, which is built on top of our `decentralizepy` fork.
+Some code fragments have been omitted as they depend heavily on our original computing grid and use [enoslib](https://discovery.gitlabpages.inria.fr/enoslib/) scripts. These omitted parts handle deployment and saving simulation results, built on top of our `decentralizepy` fork.
 
-## Organization of the repository:
-* Simulation is performed using the code of the `decentralizepy` submodule.
-* Privacy attacks are realized in the `attack/` folder of this repository.
-* Code about reorganizing the data from the `decentralizepy` simulation as well as launching all experiments was omitted, since it relies too heavily on our computing architecture ([Grid5000](https://www.grid5000.fr/w/Grid5000:Home)). The full code is nevertheless available [here](https://gitlab.inria.fr/dilereve/decentralizepy_grid5000).
-* Singularity images, one used to [run simulations](compute_container.def) and one to [run attacks](attacker_container.def). The [Makefile](Makefile) is used to build those containers.
-* Some auxiliary code, used for other types of simulation, are available under `misc_simulations/`. In particular, it is the code used for Figure 13 and Figure 14, and can be run independently.
+## Repository Organization
+* Simulations are conducted using the `decentralizepy` submodule.
+* Privacy attacks are implemented in the `attack/` folder.
+* Code for reorganizing `decentralizepy` simulation data and launching experiments is omitted due to its dependence on our computing architecture ([Grid5000](https://www.grid5000.fr/w/Grid5000:Home)). The full code is available [here](https://gitlab.inria.fr/dilereve/decentralizepy_grid5000).
+* Singularity images are used for [running simulations](compute_container.def) and [running attacks](attacker_container.def). The [Makefile](Makefile) builds these containers.
+* Additional simulation code is available in `misc_simulations/`, including [code](misc_simulations/assumption_noisy_gradient.py) for Figures 13 and 14, which can be run independently as long as the environment is installed.
 
-
-The typical order of operation is the following:
-1) Simulate ZIP-DL, where the attacker(s) will save models to then perform an attack, using the `decentralizepy` library. To run a simulation, one must generate the desired configuration file, split it across all the machines with the `ip.json` file correctly set, 
-2) Once the simulation is done, organize the result and store them in a single folder if the simulation was decentralized accross multiple machines.
-3) Run attacks, using the `attacker_container` and the `attacks` folder.
-
+## Workflow Overview
+Here is a brief overview about using our code: 
+1. Simulate ZIP-DL using our fork of the `decentralizepy` library. Attackers save models for later attacks. To do so, users must generate a configuration file, distribute it across machines, and correctly set `ip.json`.
+2. After the simulation, group results into a single folder if multiple machines were used.
+3. Run attacks using the `attacker_container` and the `attacks` folder.
+4. Format, visualize and store results using [`attacks/pets_plots.ipynb`](attacks/pets_plots.ipynb).
 
 ## Installation
-You can run `make` to build the Singularity images that contains all the necessary libraries.
+Run `make` to build the Singularity images containing all necessary libraries.
 
-For development purposes (such as language servers) or to run locally, you may want to create a local environment. 
-First, create a virtual environment. We only tested installation with python 3.10, note that python 3.11 may yield to installation conflicts with `sklearn`.
+For development or local execution, create a virtual environment. We tested with Python 3.10—Python 3.11 may cause conflicts with `sklearn`.
 
-```
+```sh
 python3.10 -m venv venv-zip-dl
 source venv-*/bin/activate
 ```
 
-Then, install requirements for `decentralizepy`:
+Then, install dependencies:
 
-```
+```sh
 pip install --editable decentralizepy
-```
-
-Finally, install the requirements for this repository:
-
-```
 pip install -r requirements.txt
 ```
 
-# Experimental pipeline overview
-We describe the typical simulation pipeline we used to produce the results in our paper. It mainly runs in 4 steps:
-1) Simulating a decentralized learning scenario
-2) Reorganizing the simulation results under a specific structure.
-3) Running attacks on the simulation result.
-4) Running visualization scripts on the resulting data.
+## Experimental Pipeline
+This pipeline produces the results in our paper in four steps:
+1. **Simulating decentralized learning**.
+2. **Reorganizing simulation results**.
+3. **Running attacks**.
+4. **Visualizing results**.
 
-We detail below each of these individual steps, and link to the relevant code that is important to our paper.
+Each step is detailed below with relevant code references.
 
-## 1 - Running simulations
+### 1 - Running Simulations
+Simulations run using [decentralizepy](https://github.com/sacs-epfl/decentralizepy). Our fork includes:
+* [`ZIP-DL`](decentralizepy/src/decentralizepy/sharing/ZeroSumSharing.py) (zerosum) and [`Muffliato`](decentralizepy/src/decentralizepy/sharing/Muffliato.py) as `Sharing` objects.
+* Modified scripts to save models at specified intervals for downstream attacks.
 
-Simulations need to be run using [decentralizepy](https://github.com/sacs-epfl/decentralizepy). The first step run our simulation is thus to be able to deploy the library on a computing grid.
+To run a simulation, generate a configuration file with the desired parameters and deploy it accordingly.
 
-Our fork mainly implements two additions:
-* We add the [`ZIP-DL`](decentralizepy/src/decentralizepy/sharing/ZeroSumSharing.py) (also named zerosum in the code) and baseline [`Muffliato`](decentralizepy/src/decentralizepy/sharing/Muffliato.py) as `Sharing` objects.
-* We adapt the simulation scripts to save models at a given interval (given in the configuration file). Those saved models will then be used for downstream attacks. 
-
-To run simulations, one first needs to generate a configuration file with the appropriate configurations, and then deploy 
-
-## 2 - Saving simulations results structure
-How you need to reorganize the result of the `decentralizepy` simulation in order to launch attacks.
-
-Here is what is expected to be saved in an experiment:
+### 2 - Organizing Simulation Results
+Simulation results need to be structured as follows for attacks:
 ```
 experiment_name/
     config.ini
@@ -72,28 +61,29 @@ experiment_name/
     ...
     machinek/
 ```
-For more details:
-* The `machine*` folders are automatically generated by the `decentralizepy` simulation, but must be put together in a single folder.
-* The `config.ini` is the `decentralizepy` config file, that was used to run the simulation. 
-* The `g5k_config.json` file contains the remaining information about the simulation (information that is mostly passed as argument to the `decentralizepy` simulation, and thus was not fitting for the simulation configuration file). In particular, it should contain:
-    * The number of nodes in the simulation
-We provide some e
+Key details:
+* `machine*` folders are generated by `decentralizepy` and should be consolidated into one directory.
+* `config.ini` contains the `decentralizepy` configuration used for the simulation.
+* `g5k_config.json` stores additional simulation parameters not included in `config.ini`, such as the number of nodes.
 
-## 3 - Attacking simulation results
+### 3 - Running Attacks
+Attacks use the `attacker_container.sif` container, which wraps [`perform_attacks.py`](attacks/perform_attacks.py). To use it:
+* Bind the folder containing experiment data to `/experiments_to_attack` in the container.
+* Provide necessary arguments for [`perform_attacks.py`](attacks/perform_attacks.py).
 
-Attack can be performed using the `attacker_container.sif` container. It is otherwise just a wrapper to [`perform_attacks.py`](attacks/perform_attacks.py), that will launch the attacks on the models saved during the simulation.
+The `attacks/` structure includes:
+* [`perform_attacks.py`](attacks/perform_attacks.py) — runs attacks on the given dataset.
+* [`classifier_attacker.py`](attacks/classifier_attacker.py) — implements the attack logic.
 
-When using the container, one must bind the folder containing the experiments to attack to `/experiments_to_attack` in the container, and give the arguments expected by [`perform_attacks.py`](attacks/perform_attacks.py).
+### 4 - Visualizing Results
+Results are analyzed in the `attacks` folder, mainly using [notebooks](attacks/pets_plots.ipynb). Supporting scripts include:
+* `plot_loaders.py`
+* `plot_results.py`
+* `plot_utils.py`
 
-The structure of `attacks/` is the following:
-* [`perform_attacks.py`](attacks/perform_attacks.py) launches all the attack on a given folder, automatically fetching the necessary 
-* [`classifier_attacker.py`](attacks/classifier_attacker.py) 
+Generated plots and stored CSV data were used to create the paper’s figures.
 
 
-## 4 - Visualizing results and storing data
-Visualization of all results is also handled in the `attacks` folder, in particular in a [notebook](attacks/pets_plots.ipynb), with an example for some plots generated for the MovieLens dataset. It is supported by the files `plot_loaders.py`, `plot_results.py` and `plot_utils.py`, whose function our notebook use.
-
-All functions also directly store the displayed data in CSV files, that we then used to make the actual figures of the paper.
 
 
 ---
