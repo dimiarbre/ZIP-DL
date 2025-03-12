@@ -91,6 +91,9 @@ The structure of `attacks/` is the following:
 
 
 ## 4 - Visualizing results and storing data
+Visualization of all results is also handled in the `attacks` folder, in particular in a [notebook](attacks/pets_plots.ipynb), with an example for some plots generated for the MovieLens dataset. It is supported by the files `plot_loaders.py`, `plot_results.py` and `plot_utils.py`, whose function our notebook use.
+
+All functions also directly store the displayed data in CSV files, that we then used to make the actual figures of the paper.
 
 
 ---
