@@ -2,21 +2,21 @@
 
 This repository contains the code for the paper "Low-Cost Privacy-Aware Decentralized Learning," available here: https://arxiv.org/abs/2403.11795.
 
-Some code fragments have been omitted as they depend heavily on our original computing grid and use [enoslib](https://discovery.gitlabpages.inria.fr/enoslib/) scripts. These omitted parts handle deployment and saving simulation results, built on top of our `decentralizepy` fork.
+Some code fragments have been omitted due to their dependence on our original computing grid and [enoslib](https://discovery.gitlabpages.inria.fr/enoslib/) scripts. These omitted parts handle deployment and saving simulation results, built on top of our `decentralizepy` fork.
 
 ## Repository Organization
 * Simulations are conducted using the `decentralizepy` submodule.
 * Privacy attacks are implemented in the `attack/` folder.
-* Code for reorganizing `decentralizepy` simulation data and launching experiments is omitted due to its dependence on our computing architecture ([Grid5000](https://www.grid5000.fr/w/Grid5000:Home)). The full code is available [here](https://gitlab.inria.fr/dilereve/decentralizepy_grid5000).
+* Code for reorganizing `decentralizepy` simulation data and launching experiments is omitted due to its reliance on our computing architecture ([Grid5000](https://www.grid5000.fr/w/Grid5000:Home)). The full code is available [here](https://gitlab.inria.fr/dilereve/decentralizepy_grid5000).
 * Singularity images are used for [running simulations](compute_container.def) and [running attacks](attacker_container.def). The [Makefile](Makefile) builds these containers.
-* Additional simulation code is available in `misc_simulations/`, including [code](misc_simulations/assumption_noisy_gradient.py) for Figures 13 and 14, which can be run independently as long as the environment is installed.
+* Additional simulation code is available in `misc_simulations/`, including [code](misc_simulations/assumption_noisy_gradient.py) for Figures 13 and 14, which can be run independently as long as the required environment is installed.
 
 ## Workflow Overview
-Here is a brief overview about using our code: 
-1. Simulate ZIP-DL using our fork of the `decentralizepy` library. Attackers save models for later attacks. To do so, users must generate a configuration file, distribute it across machines, and correctly set `ip.json`.
+A brief overview of how to use our code:
+1. Simulate ZIP-DL using our fork of the `decentralizepy` library. Attackers save models for later attacks. Users must generate a configuration file, distribute it across machines, and correctly set `ip.json`.
 2. After the simulation, group results into a single folder if multiple machines were used.
 3. Run attacks using the `attacker_container` and the `attacks` folder.
-4. Format, visualize and store results using [`attacks/pets_plots.ipynb`](attacks/pets_plots.ipynb).
+4. Format, visualize, and store results using [`attacks/pets_plots.ipynb`](attacks/pets_plots.ipynb).
 
 ## Installation
 Run `make` to build the Singularity images containing all necessary libraries.
@@ -37,10 +37,10 @@ pip install -r requirements.txt
 
 ## Experimental Pipeline
 This pipeline produces the results in our paper in four steps:
-1. **Simulating decentralized learning**.
-2. **Reorganizing simulation results**.
-3. **Running attacks**.
-4. **Visualizing results**.
+1. **Simulating decentralized learning**
+2. **Reorganizing simulation results**
+3. **Running attacks**
+4. **Visualizing results**
 
 Each step is detailed below with relevant code references.
 
@@ -52,7 +52,7 @@ Simulations run using [decentralizepy](https://github.com/sacs-epfl/decentralize
 To run a simulation, generate a configuration file with the desired parameters and deploy it accordingly.
 
 ### 2 - Organizing Simulation Results
-Simulation results need to be structured as follows for attacks:
+Simulation results should be structured as follows for attacks:
 ```
 experiment_name/
     config.ini
@@ -83,39 +83,35 @@ Results are analyzed in the `attacks` folder, mainly using [notebooks](attacks/p
 
 Generated plots and stored CSV data were used to create the paper’s figures.
 
-
-
-
 ---
 
 # Artifact Appendix
 
 Paper title: **Low-Cost Privacy-Preserving Decentralized Learning**
 
-Artifacts HotCRP Id: **9** (not your paper Id, but the artifacts id)
+Artifacts HotCRP ID: **9**
 
 Requested Badge: **Available**
 
 ## Description
-This artifact contains the code for simulations of the paper **Low-Cost Privacy-Preserving Decentralized Learning**. In particular, it contains the necessary code to:
-* Run simulations corresponding to our algorithm
-* Perform the attacks we use in our paper.
-* Gather and aggregate the results to generate the data used in our paper.
+This artifact contains the code for the simulations presented in the paper **Low-Cost Privacy-Preserving Decentralized Learning**. Specifically, it includes:
+* Code to run simulations corresponding to our algorithm.
+* Code to perform the attacks used in our paper.
+* Scripts to gather and aggregate results for generating the data used in our paper.
 
-Some chosen important code fragments for the paper are:
-* Implementation of [algorithm 1](https://github.com/dimiarbre/decentralizepy/blob/082f945/src/decentralizepy/sharing/ZeroSumSharing.py#L16)
-* Implementation of the [classifier attack](https://github.com/dimiarbre/ZIP-DL/blob/main/attacks/classifier_attacker.py#L583)
-* Implementation of the [Loss attack](https://github.com/dimiarbre/ZIP-DL/blob/main/attacks/threshold_attacker.py#L44)
+Key code fragments include:
+* Implementation of [Algorithm 1](https://github.com/dimiarbre/decentralizepy/blob/082f945/src/decentralizepy/sharing/ZeroSumSharing.py#L16).
+* Implementation of the [classifier attack](https://github.com/dimiarbre/ZIP-DL/blob/main/attacks/classifier_attacker.py#L583).
+* Implementation of the [Loss attack](https://github.com/dimiarbre/ZIP-DL/blob/main/attacks/threshold_attacker.py#L44).
 
 ### Security/Privacy Issues and Ethical Concerns (All badges)
-This artifact does not hold any security or privacy risk. We use public datasets, and perform privacy attacks on models generated within our experiments.
+This artifact does not pose any security or privacy risks. We use public datasets and conduct privacy attacks on models generated within our experiments.
 
-
-## Environment 
-In the following, describe how to access our artifact and all related and necessary data and software components.
-Afterward, describe how to set up everything and how to verify that everything is set up correctly.
+## Environment
+Below, we describe how to access the artifact and all necessary data and software components, along with setup instructions and verification steps.
 
 ### Accessibility (All badges)
-This artifact itself contains most of the source code, limited to what was used in the paper. As described above in this README, the full source code can nevertheless be found [at this link](https://gitlab.inria.fr/dilereve/decentralizepy_grid5000/-/tree/Popets_revision?ref_type=tags). However, this repository aims to be self-sufficient in terms of source code, with the only code missing being the experiment configuration generation and deployment scripts.
+This artifact contains most of the source code required for the paper. The full source code, including experiment configuration generation and deployment scripts, is available [here](https://gitlab.inria.fr/dilereve/decentralizepy_grid5000/-/tree/Popets_revision?ref_type=tags). However, this repository is self-sufficient in terms of source code, with only experiment configuration and deployment scripts missing.
 
-For the detailed organization of this repository, we refer to the above sections that describes the aim of each folder or code fragment.
+For detailed repository organization, refer to the sections above that describe the purpose of each folder and code fragment.
+
