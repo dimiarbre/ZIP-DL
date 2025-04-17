@@ -83,6 +83,9 @@ Results are analyzed in the `attacks` folder, mainly using [notebooks](attacks/p
 
 Generated plots and stored CSV data were used to create the paper’s figures.
 
+## License
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
 ---
 
 # Artifact Appendix
